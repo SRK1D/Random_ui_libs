@@ -1469,6 +1469,7 @@ function library:AddWindow(title, options)
 						end)
 
 						function dropdown_data:Add(n)
+
 							local object_data = {}
 							n = tostring(n or "New Object")
 
@@ -1504,6 +1505,12 @@ function library:AddWindow(title, options)
 									pcall(callback, n)
 								end
 							end)
+
+                            print("Objects???")
+
+                            for i, v in next, objects:GetChildren() do
+                                print("C", i, v)
+                            end
 
 							function object_data:Remove()
 								object:Destroy()
