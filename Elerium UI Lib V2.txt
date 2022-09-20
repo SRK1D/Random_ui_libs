@@ -1519,6 +1519,7 @@ function library:AddWindow(title, options)
                                     v:Destroy()
                                 end
                             end
+                        end
 
 						return dropdown_data, dropdown
 					end
