@@ -1506,18 +1506,19 @@ function library:AddWindow(title, options)
 								end
 							end)
 
-                            print("Objects???")
-
-                            for i, v in next, objects:GetChildren() do
-                                print("C", i, v)
-                            end
-
 							function object_data:Remove()
 								object:Destroy()
 							end
 
 							return object, object_data
 						end
+
+                        function dropdown_data:RemoveAll()
+                            for i, v in next, objects:GetChildren() do
+                                if v.Name == "DropdownButton" then
+                                    v:Destroy()
+                                end
+                            end
 
 						return dropdown_data, dropdown
 					end
