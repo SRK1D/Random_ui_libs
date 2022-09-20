@@ -1474,7 +1474,7 @@ function library:AddWindow(title, options)
 							n = tostring(n or "New Object")
 							
 							print(Prefabs)
-							for i, v in next, Prefabs:GetChildren() do
+							for i, v in next, (Prefabs:GetChildren()) do
 								print("C",i , v, v.Name)
 							end
 
