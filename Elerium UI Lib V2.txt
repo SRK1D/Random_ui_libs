@@ -1473,11 +1473,7 @@ function library:AddWindow(title, options)
 							local object_data = {}
 							n = tostring(n or "New Object")
 							
-							print(Prefabs)
-							print(typeof(Prefabs))
-							for i, v in next, (Prefabs:GetChildren()) do
-								print("C",i , v, v.Name)
-							end
+							wait()
 
 							local object = Prefabs:FindFirstChild("DropdownButton"):Clone()
 
