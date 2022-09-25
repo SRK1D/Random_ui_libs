@@ -822,6 +822,8 @@ local mouse = p:GetMouse()
 local Prefabs = script.Parent:WaitForChild("Prefabs")
 local Windows = script.Parent:FindFirstChild("Windows")
 
+local dropDownButtonCopy = Prefabs["DropdownButton"]:Clone()
+
 local checks = {
 	["binding"] = false,
 }
@@ -1475,7 +1477,7 @@ function library:AddWindow(title, options)
 							
 							wait()
 
-							local object = Prefabs:FindFirstChild("DropdownButton"):Clone()
+							local object = dropDownButtonCopy:Clone()
 
 							object.Parent = objects
 							object.Text = n
