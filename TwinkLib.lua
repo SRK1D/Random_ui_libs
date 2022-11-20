@@ -19,7 +19,7 @@ local DropShadowTransparency = 0.3
 local IconLibraryID = "rbxassetid://3926305904"
 local IconLibraryID2 = "rbxassetid://3926307971"
 
-local MainFont = Enum.Font.Gotham
+local MainFont = Enum.Font.Ubuntu 
 
 local function GetXY(GuiObject)
 	local X, Y = Mouse.X - GuiObject.AbsolutePosition.X, Mouse.Y - GuiObject.AbsolutePosition.Y
@@ -394,7 +394,7 @@ function UILibrary.Load(GUITitle)
 			ButtonForeground.Parent = ButtonContainer
 			
 			if Underline then
-				local TextSize = TextService:GetTextSize(Text, 12, Enum.Font.Gotham, Vector2.new(0,0))
+				local TextSize = TextService:GetTextSize(Text, 12, Enum.Font.Ubuntu , Vector2.new(0,0))
 			
 				local BottomEffect = Frame()
 				BottomEffect.Size = UDim2.new(0,TextSize.X,0,1)
@@ -433,10 +433,17 @@ function UILibrary.Load(GUITitle)
 			local HiddenLabel = TextLabel(Text, 12)
 			HiddenLabel.Parent = LabelForeground
 
-			return {
-                Label = HiddenLabel,
-                Container = LabelContainer
-            }
+            local LabelList = {}
+
+            function LabelList.Remove()
+                LabelContainer:Destroy()
+            end
+
+            function LabeList.ChangeText(Text)
+                HiddenLabel.Text = Text
+            end
+
+			return LabelList
 		end
 		
 		function PageLibrary.AddDropdown(Text, ConfigurationArray, Callback)
@@ -697,7 +704,16 @@ function UILibrary.Load(GUITitle)
 				Tween(EffectFrame, {BackgroundColor3 = ThisToggle and Color3.fromRGB(0,255,109) or Color3.fromRGB(255,160,160)})
 				Tween(RightTick, {ImageTransparency = ThisToggle and 0 or 1})
 				Callback(ThisToggle)
-			end)	
+			end)
+            
+
+            local ToggleList = {}
+
+            function ToggleList.Remove()
+                ToggleContainer:Destroy()
+            end
+
+            return ToggleList
 		end
 		
 		return PageLibrary
