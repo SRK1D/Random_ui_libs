@@ -433,7 +433,10 @@ function UILibrary.Load(GUITitle)
 			local HiddenLabel = TextLabel(Text, 12)
 			HiddenLabel.Parent = LabelForeground
 
-			return HiddenLabel
+			return {
+                Label = HiddenLabel,
+                Container = LabelContainer
+            }
 		end
 		
 		function PageLibrary.AddDropdown(Text, ConfigurationArray, Callback)
