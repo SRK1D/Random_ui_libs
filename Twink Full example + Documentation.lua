@@ -1,3 +1,5 @@
+-- Made by twink marie and modified by SRK1D (ShrimpLegs)
+
 local Twinkies = loadstring(game:HttpGet("https://raw.githubusercontent.com/SRK1D/Random_ui_libs/main/TwinkLib.lua", true))()
 
 -- // Loads the UI library and gives the functions necessary
