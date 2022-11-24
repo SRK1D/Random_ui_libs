@@ -190,14 +190,14 @@ function UILibrary.Load(GUITitle)
 	ContainerShadow.Name = "Shadow"
 	ContainerShadow.Parent = ContainerFrame
 	
-	Level += 1
+	Level = Level + 1
 	
 	MainFrame = RoundBox(5)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Name = "MainFrame"
 	MainFrame.Size = UDim2.new(1,-50,1,-30)
 	MainFrame.Position = UDim2.new(0,25,0,15)
-	MainFrame.ImageColor3 = Color3.fromRGB(30,30,30)
+	MainFrame.ImageColor3 = Color3.fromRGB(30,30,30) -- Almost fully dark
 	MainFrame.Parent = ContainerFrame
 	
 	local MenuBar, DisplayFrame, TitleBar
@@ -205,7 +205,7 @@ function UILibrary.Load(GUITitle)
 	MenuBar = ScrollingFrame()
 	MenuBar.Name = "MenuBar"
 	MenuBar.BackgroundTransparency = 0.7
-	MenuBar.BackgroundColor3 = Color3.fromRGB(20,20,20)
+	MenuBar.BackgroundColor3 = Color3.fromRGB(20,20,20) -- Close fully dark
 	MenuBar.Size = UDim2.new(0,100,0,235)
 	MenuBar.Position = UDim2.new(0,5,0,30)
 	MenuBar.CanvasSize = UDim2.new(0,0,0,0)
@@ -213,19 +213,19 @@ function UILibrary.Load(GUITitle)
 	
 	DisplayFrame = RoundBox(5)
 	DisplayFrame.Name = "Display"
-	DisplayFrame.ImageColor3 = Color3.fromRGB(20,20,20)
+	DisplayFrame.ImageColor3 = Color3.fromRGB(20,20,20) -- Close fully dark
 	DisplayFrame.Size = UDim2.new(1,-115,0,235)
 	DisplayFrame.Position = UDim2.new(0,110,0,30)
 	DisplayFrame.Parent = MainFrame
 	
 	TitleBar = RoundBox(5)
 	TitleBar.Name = "TitleBar"
-	TitleBar.ImageColor3 = Color3.fromRGB(40,40,40)
+	TitleBar.ImageColor3 = Color3.fromRGB(40,40,40) -- Less fully dark
 	TitleBar.Size = UDim2.new(1,-10,0,20)
 	TitleBar.Position = UDim2.new(0,5,0,5)
 	TitleBar.Parent = MainFrame
 	
-	Level += 1
+	Level = Level + 1
 	
 	local MinimiseButton, TitleButton
 	local MinimiseToggle = true
@@ -258,7 +258,7 @@ function UILibrary.Load(GUITitle)
 		Move = Mouse.Move:Connect(function()
 			local NewMX, NewMY = Mouse.X, Mouse.Y
 			local DX, DY = NewMX - LastMX, NewMY - LastMY
-			ContainerFrame.Position += UDim2.new(0,DX,0,DY)
+			ContainerFrame.Position = ContainerFrame.Position + UDim2.new(0,DX,0,DY)
 			LastMX, LastMY = NewMX, NewMY
 		end)
 		Kill = UserInputService.InputEnded:Connect(function(input)
@@ -269,7 +269,7 @@ function UILibrary.Load(GUITitle)
 		end)
 	end)
 	
-	Level += 1
+	Level = Level + 1
 	
 	local MenuListLayout
 	
@@ -323,7 +323,7 @@ function UILibrary.Load(GUITitle)
 		DisplayPage.Size = UDim2.new(1,0,1,0)
 		DisplayPage.Parent = DisplayFrame
 		
-		TabCount += 1
+		TabCount = TabCount + 1
 		
 		local DisplayList = Instance.new("UIListLayout")
 		DisplayList.SortOrder = Enum.SortOrder.LayoutOrder
@@ -415,6 +415,14 @@ function UILibrary.Load(GUITitle)
 				Tween(ButtonForeground, {ImageColor3 = Color3.fromRGB(35,35,35)})
 				Tween(HiddenButton, {TextTransparency = 0})
 			end)
+
+			local ButtonList = {}
+
+			function ButtonList.Destroy()
+				ButtonContainer:Destroy()
+			end
+
+			return ButtonList
 		end
 		
 		function PageLibrary.AddLabel(Text)
@@ -435,11 +443,11 @@ function UILibrary.Load(GUITitle)
 
             local LabelList = {}
 
-            function LabelList.Remove()
+            function LabelList.Destroy()
                 LabelContainer:Destroy()
             end
 
-            function LabeList.ChangeText(Text)
+            function LabelList.ChangeText(Text)
                 HiddenLabel.Text = Text
             end
 
@@ -483,14 +491,56 @@ function UILibrary.Load(GUITitle)
 				PageLibrary.AddButton(Option, function()
 					Callback(Option)
 					DropdownLabel.Text = Text..": "..Option
-				end, DropdownFrame, OptionIndex < #DropdownArray)
+				end, DropdownFrame, true)
 			end
 			
-			DropdownExpander.MouseButton1Down:Connect(function()
+			local joint = DropdownExpander.MouseButton1Down:Connect(function()
 				DropdownToggle = not DropdownToggle
-				Tween(DropdownContainer, {Size = DropdownToggle and UDim2.new(1,0,0,20+(#DropdownArray*20)) or UDim2.new(1,0,0,20)})
+				Tween(DropdownContainer, {Size = DropdownToggle and UDim2.new(1,0,0,20+((#DropdownFrame:GetChildren() - 1) * 20)) or UDim2.new(1,0,0,20)})
 				Tween(DropdownExpander, {Rotation = DropdownToggle and 135 or 0})
 			end)
+
+            local DropdownList = {}
+
+            function DropdownList.Clear()
+                for index, value in ipairs(DropdownFrame:GetChildren()) do
+                    if value.ClassName == "Frame" then
+                        value:Destroy()
+                    end
+                end
+            end
+
+            function DropdownList.Remove(Text)
+                for index, value in ipairs(DropdownFrame:GetChildren()) do
+                    if value.ClassName == "Frame" and string.lower(Text.."button") == string.lower(value.Name) then
+                        value:Destroy()
+                    end
+                end
+            end
+
+            function DropdownList.Add(_Text)
+                PageLibrary.AddButton(_Text, function()
+					Callback(_Text)
+					DropdownLabel.Text = Text..": ".._Text
+				end, DropdownFrame, true)
+            end
+
+			function DropdownList.Status()
+				return string.split(DropdownLabel.Text, ": ")[2]
+			end
+
+			function DropdownList.Set(_Text, _Callback)
+				DropdownLabel.Text = Text..": ".._Text
+				if _Callback then
+					Callback(_Text)
+				end
+			end
+
+			function DropdownList.Destroy()
+				DropdownContainer:Destroy()
+			end
+
+            return DropdownList
 		end
 		
 		function PageLibrary.AddColourPicker(Text, DefaultColour, Callback)
@@ -586,6 +636,25 @@ function UILibrary.Load(GUITitle)
 				PickerToggle = not PickerToggle
 				Tween(PickerContainer, {Size = PickerToggle and UDim2.new(1,0,0,80) or UDim2.new(1,0,0,20)})
 			end)
+
+			local ColourPickerList = {}
+
+			function ColourPickerList.Set(r, g, b)
+				if (tonumber(r) and tonumber(g) and tonumber(b)) ~= nil then
+					r, g, b = tonumber(r), tonumber(g), tonumber(b)
+					ColourTracker.Value = Color3.fromRGB(r, g, b)
+				end
+			end
+
+			function ColourPickerList.Status()
+				return ColourTracker.Value
+			end
+
+			function ColourPickerList.Destroy()
+				PickerContainer:Destroy()
+			end
+
+			return ColourPickerList
 		end
 		
 		function PageLibrary.AddSlider(Text, ConfigurationDictionary, Callback, Parent)
@@ -654,6 +723,32 @@ function UILibrary.Load(GUITitle)
 					end
 				end)
 			end)
+
+			local SliderList = {}
+
+			function SliderList.Set(value, _Callback)
+
+				local default = math.clamp(value, Minimum, Maximum)
+
+				Tween(SliderFill, {Size = UDim2.new(default/Maximum,0,1,0)})
+				-- Changes the text
+				SliderButton.Text = Text..": "..tostring(value)
+
+				if _Callback then
+					Callback(value)
+				end
+			end
+
+			function SliderList.Status()
+				local X, Y, XScale, YScale = GetXY(SliderButton)
+				local Value = math.floor(Minimum + ((Maximum - Minimum) * XScale))
+				return Value
+			end
+			function SliderList.Destroy()
+				SliderContainer:Destroy()
+			end
+
+			return SliderList
 		end
 		
 		function PageLibrary.AddToggle(Text, Default, Callback)
@@ -709,7 +804,20 @@ function UILibrary.Load(GUITitle)
 
             local ToggleList = {}
 
-            function ToggleList.Remove()
+			function ToggleList.Set(value, _Callback)
+				ThisToggle = value
+				Tween(EffectFrame, {BackgroundColor3 = ThisToggle and Color3.fromRGB(0,255,109) or Color3.fromRGB(255,160,160)})
+				Tween(RightTick, {ImageTransparency = ThisToggle and 0 or 1})
+				if _Callback then
+					Callback(value)
+				end
+			end
+
+			function ToggleList.Status()
+				return ThisToggle
+			end
+
+            function ToggleList.Destroy()
                 ToggleContainer:Destroy()
             end
 
