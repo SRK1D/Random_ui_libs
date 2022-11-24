@@ -823,6 +823,10 @@ function UILibrary.Load(GUITitle)
 
             return ToggleList
 		end
+
+		function PageLibrary.Destroy()
+			PageContainer:Destroy()
+		end
 		
 		return PageLibrary
 	end
