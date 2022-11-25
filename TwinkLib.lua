@@ -656,6 +656,96 @@ function UILibrary.Load(GUITitle)
 
 			return ColourPickerList
 		end
+
+		function PageLibrary.AddTextbox(Text, ClearTextOnFocus, DefaultText, Callback, Parent)
+			local TextboxContainer = Frame()
+			TextboxContainer.Name = Text.."TEXTBOX"
+			TextboxContainer.Size = UDim2.new(1, 0, 0, 20)
+			TextboxContainer.BackgroundTransparency = 1
+			TextboxContainer.Parent = Parent or DisplayPage
+
+
+			local FlatLeft, FlatRight = Frame(), Frame()
+			local LeftSide, RightSide, EffectFrame = RoundBox(5), RoundBox(5), Frame()
+			local Label = TextLabel(Text, 12)
+
+			LeftSide.Size = UDim2.new(0.855, -22, 1, 0)
+			LeftSide.ImageColor3 = Color3.fromRGB(35, 35, 35)
+			LeftSide.Parent = TextboxContainer
+
+			RightSide.Position = UDim2.new(1.008, 0, 0, 0)
+			RightSide.Size = UDim2.new(0, 67, 0, 20)
+			RightSide.ImageColor3 = Color3.fromRGB(45, 45, 45)
+			RightSide.Parent = LeftSide
+
+			EffectFrame.BackgroundColor3 = Color3.fromRGB(160, 223, 255)
+			EffectFrame.Position = UDim2.new(0, -2, 0, 4)
+			EffectFrame.ZIndex = 5
+			EffectFrame.Size = UDim2.new(0, 2, 0.6, 0)
+			EffectFrame.Parent = RightSide
+
+			FlatLeft.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+			FlatLeft.Size = UDim2.new(0, 5, 1, 0)
+			FlatLeft.Position = UDim2.new(1, -5, 0, 0)
+			FlatLeft.Parent = LeftSide
+
+			FlatRight.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+			FlatRight.Position = UDim2.new(0, 0, 0, 0)
+			FlatRight.Size = UDim2.new(0, 5, 1, 0)
+			FlatRight.Parent = RightSide
+
+			Label.Parent = LeftSide
+
+			local Textbox = Instance.new("TextBox")
+			Textbox.Parent = RightSide
+			Textbox.Name = "Textbox"
+			Textbox.Position = UDim2.new(0, 0, 0, 0)
+			Textbox.ZIndex = 5
+			Textbox.Size = UDim2.new(1, 0, 1, 0)
+			Textbox.ClearTextOnFocus = ClearTextOnFocus
+			Textbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Textbox.BackgroundTransparency = 1
+			Textbox.Font = Enum.Font.Ubuntu
+			Textbox.Text = ""
+			Textbox.TextSize = 12
+
+			local TS = game:GetService("TweenService")
+			local TI = TweenInfo.new(0.05, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+
+			local default_y = {Offset = RightSide.Size.Y.Offset, Scale = RightSide.Size.Y.Scale}
+			local default_x = {Offset = RightSide.Size.X.Offset, Scale = RightSide.size.X.Scale}
+
+			local frame_default_size_x = {Offset = LeftSide.Size.X.Offset, Scale = LeftSide.Size.X.Scale}
+			local frame_default_size_y = {Offset = LeftSide.Size.Y.Offset, Scale = LeftSide.Size.Y.Scale}
+
+			Textbox.Changed:Connect(function(property)
+				if property == "Text" then
+					local movement = ((Textbox.TextBounds.X - 30) > 0 and Textbox.TextBounds.X - 30 or 0)
+					TS:Create(RightSide, TI, {Size = UDim2.new(0, default_x["Offset"] + movement, default_y["Scale"], default_y["Offset"])}):Play()
+					TS:Create(LeftSide, TI, {Size = UDim2.new(frame_default_size_x["Scale"], frame_default_size_x["Offset"] - movement, frame_default_size_y["Scale"], frame_default_size_y["Offset"])}):Play()
+				end
+			end)
+
+			Textbox.FocusLost:Connect(function()
+				Callback(Textbox.Text)
+			end)
+
+			local TextboxList = {}
+
+			function TextboxList.Set(text)
+				Textbox.Text = text
+			end
+
+			function TextboxList.ChangeText(text)
+				Label.Text = text
+			end
+
+			function TextboxList.Destroy()
+				TextboxContainer:Destroy()
+			end
+
+			return TextboxList
+		end
 		
 		function PageLibrary.AddSlider(Text, ConfigurationDictionary, Callback, Parent)
 			local Configuration = ConfigurationDictionary
