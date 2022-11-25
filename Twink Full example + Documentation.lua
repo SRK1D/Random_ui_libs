@@ -1,5 +1,3 @@
--- Made by twink marie and modified by SRK1D (ShrimpLegs)
-
 local Twinkies = loadstring(game:HttpGet("https://raw.githubusercontent.com/SRK1D/Random_ui_libs/main/TwinkLib.lua", true))()
 
 -- // Loads the UI library and gives the functions necessary
@@ -109,4 +107,22 @@ end)
 
     -> Destroys the dropdown
     FirstDropdown.Destroy()
+]=]
+
+-- // Add a textbox (CUSTOM MADE)
+-- // local <str> = FirstPage.AddTextbox(<str> text, <bool> clear_text_on_focus, <str> textbox_default_text, <function> callback => value)
+local FirstTextbox = FirstPage.AddTextbox("Im a textbox?", false, "Yep I am", function(val)
+    print(val)
+end)
+
+-- // Textbox functions:
+--[=[
+    -> Set the textbox value to something else
+    FirstTextbox.Set(<str> text)
+
+    -> Changes the text to something else (label)
+    FirstTextbox.ChangeText(<str> text)
+
+    -> Destroys the textbox
+    FirstTextbox.Destroy()
 ]=]
