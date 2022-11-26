@@ -530,7 +530,7 @@ function UILibrary.Load(GUITitle)
 			end
 
 			function DropdownList.Set(_Text, _Callback)
-				DropdownLabel.Text = Text..": ".._Text
+				DropdownLabel.Text = Text..(_Text ~= "" and ": ".._Text or "")
 				if _Callback then
 					Callback(_Text)
 				end
