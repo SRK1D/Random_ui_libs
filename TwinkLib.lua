@@ -706,7 +706,7 @@ function UILibrary.Load(GUITitle)
 			Textbox.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Textbox.BackgroundTransparency = 1
 			Textbox.Font = Enum.Font.Ubuntu
-			Textbox.Text = ""
+			Textbox.Text = DefaultText
 			Textbox.TextSize = 12
 
 			local TS = game:GetService("TweenService")
