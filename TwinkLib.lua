@@ -418,6 +418,10 @@ function UILibrary.Load(GUITitle)
 
 			local ButtonList = {}
 
+			function ButtonList.ChangeText(Text)
+				HiddenButton.Text = Text
+			end
+
 			function ButtonList.Destroy()
 				ButtonContainer:Destroy()
 			end
