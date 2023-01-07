@@ -30,6 +30,9 @@ end)
 
 -- // Button functions:
 --[=[
+    -> Changes the button text to something else:
+    FirstButton.ChangeText(<str> text)
+
     -> Destroys the button:
     FirstButton.Destroy()
 ]=]
